@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     APP_TITLE: str = Field(default="Duel Insights API")
     API_PREFIX: str = Field(default="/api/v1")
     ENVIRONMENT: Literal["local", "staging", "production"] = Field(default="local")
+    BACKEND_CORS_ORIGINS: list[str] = Field(default=["http://localhost:3000"])
 
 
 settings = Settings()
