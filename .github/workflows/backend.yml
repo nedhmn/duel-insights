@@ -1,0 +1,36 @@
+name: Backend CI
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["packages/backend/**"]
+  pull_request:
+    types: ["opened", "synchronize"]
+    paths: ["packages/backend/**"]
+  workflow_dispatch:
+
+jobs:
+  lint-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./packages/backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.5.14"
+          enable-cache: true
+
+      - name: Lint backend
+        run: uv run bash scripts/lint.sh
