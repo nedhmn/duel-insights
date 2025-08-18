@@ -1,10 +1,24 @@
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.main import v1_router
 from app.config import settings
+from app.db.main import db_engine
+from app.db.models import Base
 
-app = FastAPI(title=settings.APP_TITLE)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    async with db_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+    await db_engine.dispose()
+
+
+app = FastAPI(title=settings.APP_TITLE, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
