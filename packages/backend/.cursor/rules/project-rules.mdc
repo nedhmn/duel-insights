@@ -1,0 +1,12 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+- Don't add comments to the top of python files
+- All http requests should be done with the httpx library
+- Make tests minimal
+- Python functions, class, methods, etc. documentation should just be a one line comment, not multilines
+- When setting types, use `| None` instead of `Optional` from the typing library.
+- Don't import `Dict` or `List` from typing, you can use the base `dict` and `list` instead

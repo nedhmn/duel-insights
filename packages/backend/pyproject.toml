@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "aioboto3>=15.1.0",
     "asyncpg>=0.30.0",
     "celery>=5.5.3",
     "fastapi[standard]>=0.116.1",
@@ -12,13 +13,20 @@ dependencies = [
     "playwright>=1.54.0",
     "pydantic>=2.11.7",
     "pydantic-settings>=2.10.1",
+    "python-jose[cryptography]>=3.5.0",
+    "redis>=6.4.0",
     "sqlalchemy>=2.0.42",
 ]
 
 [dependency-groups]
 dev = [
+    "aiosqlite>=0.21.0",
+    "httpx>=0.25.0",
     "mypy>=1.17.1",
     "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.2.1",
+    "types-python-jose>=3.3.4",
     "ruff>=0.12.7",
 ]
 
@@ -31,6 +39,25 @@ strict = true
 [tool.ruff]
 target-version = "py312"
 include = ["app/**/*.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    "--disable-warnings",
+    "--import-mode=importlib",
+]
+asyncio_mode = "auto"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests",
+]
 
 [tool.uv]
 cache-dir=".cache"

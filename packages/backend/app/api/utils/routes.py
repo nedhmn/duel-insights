@@ -4,7 +4,7 @@ from fastapi import APIRouter
 
 from .models import HealthCheckResponse
 
-router = APIRouter(prefix="/utils", tags=["utils"])
+router = APIRouter()
 
 
 @router.get("/health-check", response_model=HealthCheckResponse)
