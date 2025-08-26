@@ -48,6 +48,7 @@ addopts = [
     "--tb=short",
     "--strict-markers",
     "--disable-warnings",
+    "--import-mode=importlib",
 ]
 asyncio_mode = "auto"
 markers = [

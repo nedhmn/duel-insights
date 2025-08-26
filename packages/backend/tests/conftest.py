@@ -1,9 +1,13 @@
-import asyncio
 import pytest
-import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import StaticPool
+
+import sys
+from pathlib import Path
+
+# Add the parent directory to sys.path for importlib mode
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import Settings
 from app.db.database import get_db_session
@@ -11,12 +15,8 @@ from app.db.models import Base
 from app.main import app
 
 
-@pytest.fixture(scope="session")
-def event_loop():
-    """Create an instance of the default event loop for the test session."""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
+# Note: With pytest-asyncio in auto mode, we don't need a custom event_loop fixture
+# The default event loop management is handled automatically
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def test_settings():
     )
 
 
-@pytest_asyncio.fixture
+@pytest.fixture
 async def test_db_session(test_settings):
     """Create a test database session with in-memory SQLite."""
     # Use in-memory SQLite for tests
@@ -54,7 +54,7 @@ async def test_db_session(test_settings):
     await engine.dispose()
 
 
-@pytest_asyncio.fixture
+@pytest.fixture
 async def test_client(test_db_session, test_settings):
     """Create a test client with dependency overrides."""
 
