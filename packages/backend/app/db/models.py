@@ -11,7 +11,6 @@ from sqlalchemy import (
     JSON,
     ForeignKey,
     Index,
-    text,
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -25,16 +24,16 @@ class BaseModel(Base):
     __abstract__ = True
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID, primary_key=True, nullable=False, server_default=text("gen_random_uuid()")
+        UUID, primary_key=True, nullable=False, default=uuid.uuid4
     )
     created_at: Mapped[datetime] = mapped_column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP(timezone=True), nullable=False, default=datetime.utcnow
     )
     updated_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True),
         nullable=False,
-        server_default=text("now()"),
-        server_onupdate=text("now()"),
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
     )
 
 
@@ -90,7 +89,7 @@ class Job(BaseModel):
         unique=True,
         index=True,
         nullable=False,
-        server_default=text("gen_random_uuid()"),
+        default=uuid.uuid4,
     )
     is_public: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 

@@ -9,7 +9,7 @@ class TestSettings:
     """Unit tests for Settings configuration."""
 
     @pytest.mark.unit
-    def test_settings_default_values(self):
+    def test_settings_default_values(self) -> None:
         """Test that Settings has correct default values."""
         with patch.dict(
             os.environ,
@@ -38,7 +38,7 @@ class TestSettings:
             assert settings.POSTGRES_PORT == 5432
 
     @pytest.mark.unit
-    def test_database_url_construction(self):
+    def test_database_url_construction(self) -> None:
         """Test that DATABASE_URL is constructed correctly."""
         with patch.dict(
             os.environ,
@@ -58,7 +58,7 @@ class TestSettings:
             assert settings.DATABASE_URL == expected_url
 
     @pytest.mark.unit
-    def test_environment_validation(self):
+    def test_environment_validation(self) -> None:
         """Test that ENVIRONMENT accepts only valid values."""
         valid_environments = ["local", "staging", "production"]
 
@@ -81,7 +81,7 @@ class TestSettings:
                 assert settings.ENVIRONMENT == env
 
     @pytest.mark.unit
-    def test_cors_origins_list(self):
+    def test_cors_origins_list(self) -> None:
         """Test that BACKEND_CORS_ORIGINS handles list values correctly."""
         with patch.dict(
             os.environ,
@@ -102,7 +102,7 @@ class TestSettings:
             assert settings.BACKEND_CORS_ORIGINS == expected_origins
 
     @pytest.mark.unit
-    def test_all_required_fields_are_present(self):
+    def test_all_required_fields_are_present(self) -> None:
         """Test that all required fields are defined in the Settings class."""
         # This test ensures that we haven't accidentally made required fields optional
         required_fields = {
@@ -136,7 +136,7 @@ class TestSettings:
         )
 
     @pytest.mark.unit
-    def test_port_type_conversion(self):
+    def test_port_type_conversion(self) -> None:
         """Test that POSTGRES_PORT is correctly converted to int."""
         with patch.dict(
             os.environ,
@@ -156,7 +156,7 @@ class TestSettings:
             assert settings.POSTGRES_PORT == 9999
 
     @pytest.mark.unit
-    def test_clerk_jwks_url_property(self):
+    def test_clerk_jwks_url_property(self) -> None:
         """Test that CLERK_JWKS_URL is constructed correctly from CLERK_JWT_ISSUER."""
         with patch.dict(
             os.environ,
@@ -179,7 +179,7 @@ class TestSettings:
             assert settings.CLERK_JWKS_URL == expected_jwks_url
 
     @pytest.mark.unit
-    def test_clerk_jwks_url_empty_issuer(self):
+    def test_clerk_jwks_url_empty_issuer(self) -> None:
         """Test CLERK_JWKS_URL behavior with empty issuer."""
         # Create settings directly with empty issuer to avoid env var interference
         settings = Settings(
