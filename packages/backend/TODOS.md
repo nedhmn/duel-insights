@@ -53,13 +53,13 @@
 
 ### Job Management Endpoints
 
-- [ ] **Individual Mode Endpoints**
-  - [ ] `POST /api/v1/jobs/individual` - Submit job with URL validation
-  - [ ] `GET /api/v1/jobs/{job_id}` - Get job status and metadata
-  - [ ] `GET /api/v1/jobs/{job_id}/progress` - Get real-time progress
-  - [ ] `GET /api/v1/jobs/{job_id}/results` - Get transformed results
-  - [ ] `DELETE /api/v1/jobs/{job_id}` - Cancel pending/running job
-  - [ ] **Unit tests**: Test endpoint validation, error handling, and responses
+- [x] **Individual Mode Endpoints**
+  - [x] `POST /api/v1/jobs/individual` - Submit job with URL validation
+  - [x] `GET /api/v1/jobs/{job_id}` - Get job status and metadata
+  - [x] `GET /api/v1/jobs/{job_id}/progress` - Get real-time progress
+  - [x] `GET /api/v1/jobs/{job_id}/results` - Get transformed results
+  - [x] `DELETE /api/v1/jobs/{job_id}` - Cancel pending/running job
+  - [x] **Unit tests**: Test endpoint validation, error handling, and responses
 
 ### User Job Management
 

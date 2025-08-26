@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from typing import AsyncGenerator
 from sqlalchemy.pool import StaticPool
 
 import sys
@@ -20,7 +21,7 @@ from app.main import app
 
 
 @pytest.fixture
-def test_settings():
+def test_settings() -> Settings:
     """Test settings with in-memory database."""
     return Settings(
         APP_TITLE="Test Duel Insights API",
@@ -35,7 +36,9 @@ def test_settings():
 
 
 @pytest.fixture
-async def test_db_session(test_settings):
+async def test_db_session(
+    test_settings: Settings,
+) -> AsyncGenerator[AsyncSession, None]:
     """Create a test database session with in-memory SQLite."""
     # Use in-memory SQLite for tests
     engine = create_async_engine(
@@ -55,13 +58,15 @@ async def test_db_session(test_settings):
 
 
 @pytest.fixture
-async def test_client(test_db_session, test_settings):
+async def test_client(
+    test_db_session: AsyncSession, test_settings: Settings
+) -> AsyncGenerator[AsyncClient, None]:
     """Create a test client with dependency overrides."""
 
-    def override_get_db():
+    def override_get_db() -> AsyncSession:
         return test_db_session
 
-    def override_settings():
+    def override_settings() -> Settings:
         return test_settings
 
     app.dependency_overrides[get_db_session] = override_get_db

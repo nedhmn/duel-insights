@@ -9,7 +9,7 @@ class TestUserModel:
     """Unit tests for User model."""
 
     @pytest.mark.unit
-    def test_user_creation(self):
+    def test_user_creation(self) -> None:
         """Test User model creation with required fields."""
         user = User(clerk_user_id="clerk_12345")
 
@@ -21,7 +21,7 @@ class TestUserModel:
         assert user.updated_at is None  # Will be set by database
 
     @pytest.mark.unit
-    def test_user_relationships(self):
+    def test_user_relationships(self) -> None:
         """Test User model relationships."""
         user = User(clerk_user_id="clerk_12345")
 
@@ -34,7 +34,7 @@ class TestJobModel:
     """Unit tests for Job model."""
 
     @pytest.mark.unit
-    def test_job_creation_individual(self):
+    def test_job_creation_individual(self) -> None:
         """Test Job model creation for individual mode."""
         user_id = uuid.uuid4()
         urls = ["https://example.com/replay1", "https://example.com/replay2"]
@@ -60,7 +60,7 @@ class TestJobModel:
         assert job.completed_at is None
 
     @pytest.mark.unit
-    def test_job_creation_gfwl(self):
+    def test_job_creation_gfwl(self) -> None:
         """Test Job model creation for GFWL mode."""
         user_id = uuid.uuid4()
         urls = ["https://example.com/match1", "https://example.com/match2"]
@@ -79,22 +79,22 @@ class TestJobModel:
         assert job.urls == urls
 
     @pytest.mark.unit
-    def test_job_status_enum(self):
+    def test_job_status_enum(self) -> None:
         """Test JobStatus enum values."""
-        assert JobStatus.PENDING == "pending"
-        assert JobStatus.RUNNING == "running"
-        assert JobStatus.COMPLETED == "completed"
-        assert JobStatus.FAILED == "failed"
-        assert JobStatus.CANCELLED == "cancelled"
+        assert JobStatus.PENDING.value == "pending"
+        assert JobStatus.RUNNING.value == "running"
+        assert JobStatus.COMPLETED.value == "completed"
+        assert JobStatus.FAILED.value == "failed"
+        assert JobStatus.CANCELLED.value == "cancelled"
 
     @pytest.mark.unit
-    def test_job_type_enum(self):
+    def test_job_type_enum(self) -> None:
         """Test JobType enum values."""
-        assert JobType.INDIVIDUAL == "individual"
-        assert JobType.GFWL == "gfwl"
+        assert JobType.INDIVIDUAL.value == "individual"
+        assert JobType.GFWL.value == "gfwl"
 
     @pytest.mark.unit
-    def test_job_progress_tracking(self):
+    def test_job_progress_tracking(self) -> None:
         """Test job progress tracking fields."""
         user_id = uuid.uuid4()
 
@@ -114,7 +114,7 @@ class TestJobModel:
         assert job.processed_urls == 2
 
     @pytest.mark.unit
-    def test_job_error_handling(self):
+    def test_job_error_handling(self) -> None:
         """Test job error message field."""
         user_id = uuid.uuid4()
 
@@ -131,7 +131,7 @@ class TestJobModel:
         assert job.error_message == "Network timeout"
 
     @pytest.mark.unit
-    def test_job_sharing_features(self):
+    def test_job_sharing_features(self) -> None:
         """Test job sharing functionality."""
         user_id = uuid.uuid4()
 
@@ -147,7 +147,7 @@ class TestJobModel:
         assert job.shareable_id is None  # Will be set by database default
 
     @pytest.mark.unit
-    def test_job_timestamps(self):
+    def test_job_timestamps(self) -> None:
         """Test job timestamp fields."""
         user_id = uuid.uuid4()
         start_time = datetime.now()
@@ -168,7 +168,7 @@ class TestScrapedDataModel:
     """Unit tests for ScrapedData model."""
 
     @pytest.mark.unit
-    def test_scraped_data_creation(self):
+    def test_scraped_data_creation(self) -> None:
         """Test ScrapedData model creation."""
         url = "https://example.com/replay/123"
         s3_key = "scraped-data/2024/01/replay-123.json"
@@ -182,7 +182,7 @@ class TestScrapedDataModel:
         assert scraped_data.updated_at is None  # Will be set by database default
 
     @pytest.mark.unit
-    def test_scraped_data_url_mapping(self):
+    def test_scraped_data_url_mapping(self) -> None:
         """Test URL to S3 key mapping functionality."""
         test_cases = [
             {
@@ -205,7 +205,7 @@ class TestGFWLTeamSubmissionModel:
     """Unit tests for GFWLTeamSubmission model."""
 
     @pytest.mark.unit
-    def test_gfwl_submission_creation(self):
+    def test_gfwl_submission_creation(self) -> None:
         """Test GFWLTeamSubmission model creation."""
         job_id = uuid.uuid4()
         team_name = "Test Team"
@@ -224,7 +224,7 @@ class TestGFWLTeamSubmissionModel:
         assert submission.confirmation_status is None  # Will be set by database default
 
     @pytest.mark.unit
-    def test_gfwl_player_confirmation(self):
+    def test_gfwl_player_confirmation(self) -> None:
         """Test GFWL player confirmation workflow."""
         job_id = uuid.uuid4()
         discovered_players = ["Player1", "Player2", "Player3", "Player4"]
@@ -248,7 +248,7 @@ class TestGFWLTeamSubmissionModel:
         assert submission.confirmation_status == "confirmed"
 
     @pytest.mark.unit
-    def test_gfwl_submission_validation(self):
+    def test_gfwl_submission_validation(self) -> None:
         """Test GFWLTeamSubmission field validation."""
         job_id = uuid.uuid4()
 
@@ -263,7 +263,7 @@ class TestGFWLTeamSubmissionModel:
         assert submission.team_name == "Empty Team"
 
     @pytest.mark.unit
-    def test_gfwl_submission_relationships(self):
+    def test_gfwl_submission_relationships(self) -> None:
         """Test GFWLTeamSubmission model relationships."""
         job_id = uuid.uuid4()
 
@@ -282,7 +282,7 @@ class TestModelRelationships:
     """Integration tests for model relationships."""
 
     @pytest.mark.unit
-    def test_user_job_relationship(self):
+    def test_user_job_relationship(self) -> None:
         """Test User-Job relationship."""
         user = User(clerk_user_id="clerk_12345")
         user_id = uuid.uuid4()
@@ -307,7 +307,7 @@ class TestModelRelationships:
         assert hasattr(job2, "user")
 
     @pytest.mark.unit
-    def test_job_gfwl_submission_relationship(self):
+    def test_job_gfwl_submission_relationship(self) -> None:
         """Test Job-GFWLTeamSubmission relationship."""
         job_id = uuid.uuid4()
 
@@ -334,7 +334,7 @@ class TestModelValidation:
     """Tests for model field validation and constraints."""
 
     @pytest.mark.unit
-    def test_required_fields_validation(self):
+    def test_required_fields_validation(self) -> None:
         """Test that required fields are properly defined."""
         # User required fields
         user_fields = User.__table__.columns.keys()
@@ -364,7 +364,7 @@ class TestModelValidation:
             assert field in gfwl_fields
 
     @pytest.mark.unit
-    def test_enum_constraints(self):
+    def test_enum_constraints(self) -> None:
         """Test enum field constraints."""
         # Test all JobStatus values
         valid_statuses = [

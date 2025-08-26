@@ -1,8 +1,7 @@
-import json
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime, timezone, timedelta
-from jose import jwt
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.jwt_handler import JWTHandler, jwt_handler
 from app.auth.models import UserContext, AuthError
@@ -12,7 +11,7 @@ from app.db.models import User
 
 # Global fixtures for auth tests
 @pytest.fixture
-def mock_jwks():
+def mock_jwks() -> dict[str, list[dict[str, str]]]:
     """Mock JWKS response."""
     return {
         "keys": [
@@ -29,7 +28,7 @@ def mock_jwks():
 
 
 @pytest.fixture
-def valid_jwt_claims():
+def valid_jwt_claims() -> dict[str, str | int | bool]:
     """Valid JWT claims for testing."""
     return {
         "sub": "user_2abc123def456",
@@ -51,7 +50,9 @@ class TestJWTHandler:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_jwks_success(self, mock_jwks):
+    async def test_get_jwks_success(
+        self, mock_jwks: dict[str, list[dict[str, str]]]
+    ) -> None:
         """Test successful JWKS retrieval."""
         handler = JWTHandler()
 
@@ -72,7 +73,7 @@ class TestJWTHandler:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_jwks_http_error(self):
+    async def test_get_jwks_http_error(self) -> None:
         """Test JWKS retrieval with HTTP error."""
         handler = JWTHandler()
 
@@ -88,7 +89,9 @@ class TestJWTHandler:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_jwks_caching(self, mock_jwks):
+    async def test_get_jwks_caching(
+        self, mock_jwks: dict[str, list[dict[str, str]]]
+    ) -> None:
         """Test JWKS caching behavior."""
         handler = JWTHandler()
 
@@ -114,7 +117,9 @@ class TestJWTHandler:
             mock_client.return_value.__aenter__.return_value.get.assert_called_once()
 
     @pytest.mark.unit
-    def test_extract_user_info(self, valid_jwt_claims):
+    def test_extract_user_info(
+        self, valid_jwt_claims: dict[str, str | int | bool]
+    ) -> None:
         """Test user info extraction from JWT claims."""
         handler = JWTHandler()
 
@@ -125,7 +130,11 @@ class TestJWTHandler:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_verify_token_success(self, mock_jwks, valid_jwt_claims):
+    async def test_verify_token_success(
+        self,
+        mock_jwks: dict[str, list[dict[str, str]]],
+        valid_jwt_claims: dict[str, str | int | bool],
+    ) -> None:
         """Test successful token verification."""
         handler = JWTHandler()
         test_token = "test.jwt.token"
@@ -141,7 +150,7 @@ class TestJWTHandler:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_verify_token_empty(self):
+    async def test_verify_token_empty(self) -> None:
         """Test token verification with empty token."""
         handler = JWTHandler()
 
@@ -150,7 +159,9 @@ class TestJWTHandler:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_verify_token_missing_kid(self, mock_jwks):
+    async def test_verify_token_missing_kid(
+        self, mock_jwks: dict[str, list[dict[str, str]]]
+    ) -> None:
         """Test token verification with missing key ID."""
         handler = JWTHandler()
         test_token = "test.jwt.token"
@@ -162,7 +173,9 @@ class TestJWTHandler:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_verify_token_key_not_found(self, mock_jwks):
+    async def test_verify_token_key_not_found(
+        self, mock_jwks: dict[str, list[dict[str, str]]]
+    ) -> None:
         """Test token verification with key not found in JWKS."""
         handler = JWTHandler()
         test_token = "test.jwt.token"
@@ -181,7 +194,7 @@ class TestUserContext:
     """Unit tests for UserContext model."""
 
     @pytest.mark.unit
-    def test_user_context_creation(self):
+    def test_user_context_creation(self) -> None:
         """Test UserContext model creation."""
         context = UserContext(
             clerk_user_id="user_123",
@@ -193,7 +206,7 @@ class TestUserContext:
         assert context.user_id is None  # Not set initially
 
     @pytest.mark.unit
-    def test_user_context_minimal(self):
+    def test_user_context_minimal(self) -> None:
         """Test UserContext with minimal required data."""
         context = UserContext(clerk_user_id="user_123")
 
@@ -205,7 +218,7 @@ class TestAuthError:
     """Unit tests for AuthError exception."""
 
     @pytest.mark.unit
-    def test_auth_error_default(self):
+    def test_auth_error_default(self) -> None:
         """Test AuthError with default status code."""
         error = AuthError("Test error")
 
@@ -214,7 +227,7 @@ class TestAuthError:
         assert str(error) == "Test error"
 
     @pytest.mark.unit
-    def test_auth_error_custom_status(self):
+    def test_auth_error_custom_status(self) -> None:
         """Test AuthError with custom status code."""
         error = AuthError("Forbidden", 403)
 
@@ -227,7 +240,9 @@ class TestAuthDependencies:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_user_context_success(self, valid_jwt_claims):
+    async def test_get_user_context_success(
+        self, valid_jwt_claims: dict[str, str | int | bool]
+    ) -> None:
         """Test successful user context extraction."""
         from fastapi.security import HTTPAuthorizationCredentials
 
@@ -250,7 +265,7 @@ class TestAuthDependencies:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_user_context_no_credentials(self):
+    async def test_get_user_context_no_credentials(self) -> None:
         """Test user context extraction without credentials."""
         from fastapi import HTTPException
 
@@ -262,7 +277,7 @@ class TestAuthDependencies:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_user_context_invalid_token(self):
+    async def test_get_user_context_invalid_token(self) -> None:
         """Test user context extraction with invalid token."""
         from fastapi import HTTPException
         from fastapi.security import HTTPAuthorizationCredentials
@@ -282,7 +297,9 @@ class TestAuthDependencies:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_current_user_existing(self, test_db_session):
+    async def test_get_current_user_existing(
+        self, test_db_session: AsyncSession
+    ) -> None:
         """Test getting existing user from database."""
         import uuid
         from datetime import datetime
@@ -310,7 +327,7 @@ class TestAuthDependencies:
 
     @pytest.mark.unit
     @pytest.mark.asyncio
-    async def test_get_current_user_new(self, test_db_session):
+    async def test_get_current_user_new(self, test_db_session: AsyncSession) -> None:
         """Test creating new user when doesn't exist."""
         # Create user context for non-existent user
         user_context = UserContext(clerk_user_id="new_user_456")
@@ -331,7 +348,7 @@ class TestAuthDependencies:
                     )
 
                     # Mock refresh to populate the user
-                    def mock_refresh_side_effect(user):
+                    def mock_refresh_side_effect(user: User) -> None:
                         user.id = mock_user.id
                         user.created_at = mock_user.created_at
                         user.updated_at = mock_user.updated_at
