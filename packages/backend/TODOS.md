@@ -22,12 +22,12 @@
 
 ### Authentication & Security
 
-- [ ] **Clerk JWT Integration**
-  - [ ] Create JWT dependency for route protection
-  - [ ] Implement user context extraction from JWT claims
-  - [ ] Create middleware for authentication
-  - [ ] Add user creation/lookup logic on first JWT verification
-  - [ ] **Unit tests**: Test JWT validation and user lookup logic
+- [x] **Clerk JWT Integration**
+  - [x] Create JWT dependency for route protection
+  - [x] Implement user context extraction from JWT claims
+  - [x] Create middleware for authentication
+  - [x] Add user creation/lookup logic on first JWT verification
+  - [x] **Unit tests**: Test JWT validation and user lookup logic
 
 ### Configuration & Environment
 

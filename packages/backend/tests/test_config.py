@@ -29,7 +29,8 @@ class TestSettings:
             assert settings.APP_TITLE == "Test App"
             assert settings.API_PREFIX == "/api/v1"
             assert settings.ENVIRONMENT == "local"  # default value
-            assert settings.BACKEND_CORS_ORIGINS == ["*"]  # default value
+            # Test that default CORS origins are applied when not explicitly set
+            assert settings.BACKEND_CORS_ORIGINS == ["*"]  # default value from Field
             assert settings.POSTGRES_USER == "test_user"
             assert settings.POSTGRES_PASSWORD == "test_pass"
             assert settings.POSTGRES_DB == "test_db"
@@ -112,6 +113,7 @@ class TestSettings:
             "POSTGRES_DB",
             "POSTGRES_HOST",
             "POSTGRES_PORT",
+            "CLERK_JWT_ISSUER",
         }
 
         # Get all field names from the Settings model
@@ -152,3 +154,43 @@ class TestSettings:
             settings = Settings()
             assert isinstance(settings.POSTGRES_PORT, int)
             assert settings.POSTGRES_PORT == 9999
+
+    @pytest.mark.unit
+    def test_clerk_jwks_url_property(self):
+        """Test that CLERK_JWKS_URL is constructed correctly from CLERK_JWT_ISSUER."""
+        with patch.dict(
+            os.environ,
+            {
+                "APP_TITLE": "Test App",
+                "API_PREFIX": "/api/v1",
+                "POSTGRES_USER": "test",
+                "POSTGRES_PASSWORD": "test",
+                "POSTGRES_DB": "test",
+                "POSTGRES_HOST": "localhost",
+                "POSTGRES_PORT": "5432",
+                "CLERK_JWT_ISSUER": "https://test-app.clerk.accounts.dev",
+            },
+            clear=True,
+        ):
+            settings = Settings()
+            expected_jwks_url = (
+                "https://test-app.clerk.accounts.dev/.well-known/jwks.json"
+            )
+            assert settings.CLERK_JWKS_URL == expected_jwks_url
+
+    @pytest.mark.unit
+    def test_clerk_jwks_url_empty_issuer(self):
+        """Test CLERK_JWKS_URL behavior with empty issuer."""
+        # Create settings directly with empty issuer to avoid env var interference
+        settings = Settings(
+            APP_TITLE="Test App",
+            API_PREFIX="/api/v1",
+            POSTGRES_USER="test",
+            POSTGRES_PASSWORD="test",
+            POSTGRES_DB="test",
+            POSTGRES_HOST="localhost",
+            POSTGRES_PORT=5432,
+            CLERK_JWT_ISSUER="",
+        )
+        expected_jwks_url = "/.well-known/jwks.json"
+        assert settings.CLERK_JWKS_URL == expected_jwks_url

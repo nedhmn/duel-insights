@@ -24,15 +24,19 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int
 
     # Clerk Authentication
-    CLERK_JWT_ISSUER: str = Field(default="")
-    CLERK_JWT_AUDIENCE: str = Field(default="")
-    CLERK_SECRET_KEY: str = Field(default="")
+    CLERK_JWT_ISSUER: str = Field(
+        default="", description="e.g., https://your-app.clerk.accounts.dev"
+    )
+
+    @property
+    def CLERK_JWKS_URL(self) -> str:
+        return f"{self.CLERK_JWT_ISSUER}/.well-known/jwks.json"
 
     # AWS S3
     AWS_ACCESS_KEY_ID: str = Field(default="")
     AWS_SECRET_ACCESS_KEY: str = Field(default="")
     AWS_S3_BUCKET: str = Field(default="")
-    AWS_S3_REGION: str = Field(default="us-east-1")
+    AWS_S3_REGION: str = Field(default="")
 
     # Redis (Celery broker/backend + caching)
     REDIS_URL: str = Field(default="redis://localhost:6379/0")
