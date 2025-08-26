@@ -4,11 +4,13 @@
 
 ### Testing & Validation Setup (Must Pass Before Phase 2)
 
-- [x] **Testing Infrastructure**
-  - [x] Set up pytest configuration and test database
-  - [x] Create basic test structure (`tests/` directory)
-  - [x] Add unit test for Settings configuration
-  - [x] Create test command in Makefile for validation
+- [ ] **Testing Infrastructure**
+  - [ ] Set up pytest configuration and test database
+  - [ ] Create basic test structure (`tests/` directory)
+  - [ ] Add unit test for Settings configuration
+  - [ ] Configure mypy for strict type checking
+  - [ ] Configure ruff for code formatting and linting
+  - [ ] Create test command in Makefile for validation
 
 ### Database & Models
 
@@ -31,23 +33,23 @@
 
 ### Configuration & Environment
 
-- [x] **Environment Setup**
-  - [x] Update Settings class with all required environment variables
-  - [x] Add Redis URL configuration
-  - [x] Add AWS S3 configuration (with aioboto3)
-  - [x] Add Clerk JWT configuration
-  - [x] Add BrightData configuration
-  - [x] Create .env.example file
-  - [x] **Unit tests**: Test configuration validation and defaults
+- [ ] **Environment Setup**
+  - [ ] Update Settings class with all required environment variables
+  - [ ] Add Redis URL configuration
+  - [ ] Add AWS S3 configuration (with aioboto3)
+  - [ ] Add Clerk JWT configuration
+  - [ ] Add BrightData configuration
+  - [ ] Create .env.example file
+  - [ ] **Unit tests**: Test configuration validation and defaults
 
 ### Phase 1 Success Criteria (All Must Pass)
 
-- [x] **Validation Gate**
-  - [x] All unit tests pass (`pytest`)
-  - [x] Type checking passes (`mypy app/`)
-  - [x] Code formatting passes (`ruff check app/`)
+- [ ] **Validation Gate**
+  - [ ] All unit tests pass (`pytest`)
+  - [ ] Type checking passes (`mypy app/`)
+  - [ ] Code formatting passes (`ruff check app/`)
   - [ ] Database models can be created successfully
-  - [x] Settings can load from environment variables
+  - [ ] Settings can load from environment variables
 
 ## Phase 2: Core API Endpoints (Week 2-3)
 

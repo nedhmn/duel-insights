@@ -20,8 +20,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "aiosqlite>=0.21.0",
     "mypy>=1.17.1",
     "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.2.1",
     "ruff>=0.12.7",
 ]
 
@@ -34,6 +37,24 @@ strict = true
 [tool.ruff]
 target-version = "py312"
 include = ["app/**/*.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    "--disable-warnings",
+]
+asyncio_mode = "auto"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests",
+]
 
 [tool.uv]
 cache-dir=".cache"
