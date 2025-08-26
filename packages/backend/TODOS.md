@@ -12,13 +12,13 @@
 
 ### Database & Models
 
-- [ ] **Setup Database Schema**
-  - [ ] Implement User model with clerk_user_id field (extending existing)
-  - [ ] Implement Job model with shareable_id and is_public fields
-  - [ ] Implement ScrapedData model (URL -> S3 key mapping)
-  - [ ] Implement GFWLTeamSubmission model
-  - [ ] Add database indexes for performance
-  - [ ] **Unit tests**: Test model validation and relationships
+- [x] **Setup Database Schema**
+  - [x] Implement User model with clerk_user_id field (extending existing)
+  - [x] Implement Job model with shareable_id and is_public fields
+  - [x] Implement ScrapedData model (URL -> S3 key mapping)
+  - [x] Implement GFWLTeamSubmission model
+  - [x] Add database indexes for performance
+  - [x] **Unit tests**: Test model validation and relationships
 
 ### Authentication & Security
 
@@ -46,7 +46,7 @@
   - [x] All unit tests pass (`pytest`)
   - [x] Type checking passes (`mypy app/`)
   - [x] Code formatting passes (`ruff check app/`)
-  - [ ] Database models can be created successfully
+  - [x] Database models can be created successfully
   - [x] Settings can load from environment variables
 
 ## Phase 2: Core API Endpoints (Week 2-3)
