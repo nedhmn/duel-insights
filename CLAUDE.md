@@ -13,7 +13,7 @@ The primary goal of Duel Insights is to provide deep analysis of DuelingBook rep
 
 These are high-level rules that apply across the entire project.
 
-- **Testing Philosophy:** All new business logic must be accompanied by validation. Backend services require unit tests.
+- **Testing Philosophy:** All new business logic must be accompanied by validation. The backend relies exclusively on unit tests where external dependencies are mocked.
 - **Data Architecture:** The system follows a "raw data storage + on-demand transformation" pattern. Raw scraped data stored in S3 is the source of truth. Processed results are computed on-demand and cached in Redis.
 
 ## 3. Master Document Index
@@ -24,11 +24,10 @@ For detailed information, refer to the following documents:
 
   - _Purpose:_ A high-level description of how all system components connect and interact.
 
-- **Backend Package:** [`/packages/backend/`](/packages/backend/)
-  - **Technical Spec:** [`docs/technical-spec.md`](/packages/backend/docs/technical-spec.md) - The detailed blueprint for the backend, including data models, services, and task processing.
-  - **Conventions:** [`docs/conventions.md`](/packages/backend/docs/conventions.md) - Rules for Python code style and API design for the backend.
+- **Backend Package:** [`/packages/backend/CLAUDE.md`](/packages/backend/CLAUDE.md)
+  - _Purpose:_ The primary AI context and detailed document index for all backend-specific development.
 
-## 4. Miscellanous Rules
+## 4. Miscellaneous Rules
 
-- All markdown files to be in kebab case
-- No mermaid diagrams in any files
+- All markdown files are to be in kebab-case.
+- No mermaid diagrams in any files.
